@@ -45,7 +45,7 @@
             <div class="col-sm-12">
               <div class="card">
                 <div class="card-body">
-                  <form action="/user/<%=users._id%>" method="PUT">
+                  <form action="/user/<%=users._id%>" method="post">
                     <div class="form-row">
                       <div class="form-group col-md-<% if(users.disabled === true){%>4<%}else{%>6<%}%>">
                         <label for="userName">User Name</label>
@@ -58,7 +58,7 @@
                       <div class="form-group col-md-<% if(users.disabled === true){%>4<%}else{%>6<%}%>">
                         <label for="email">email</label>
                         <%if(userEdit){%>
-                        <input required type="text" class="form-control" id="email" name="email" value="<%=users.email%>" placeholder="<%=users.email%>">
+                        <input required type="text" class="form-control" id="email" name="preferred_username" value="<%=users.email%>" placeholder="<%=users.email%>">
                         <%}else{%>
                         <input required readonly type="text" class="form-control-plaintext" id="email" name="email" value="<%=users.email%>" placeholder="<%=users.email%>">
                         <%}%>
