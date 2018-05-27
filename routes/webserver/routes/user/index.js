@@ -22,8 +22,10 @@ const express = require('express')
     })
     //Post Requests
     router.post('/',(req, res) =>{
-
-
+      api.postUser(req.body,null,null).then((res)=>{
+        console.log('User Created')
+        res.redirect(`/user/${res.data._id}`)
+      }).catch((error)=>{res.send(error)})
     })
 
     router.get('/:id/',ensureAuthenticated,(req, res) =>{
@@ -50,13 +52,17 @@ const express = require('express')
         }).catch((error)=>res.send(error.response))
     });
 
-    router.put('/:id/',ensureAuthenticated,(req, res) =>{
-
-
+    router.post('/:id/',ensureAuthenticated,(req, res) =>{
+      api.putUser(req.params.id,req.body,null).then((res)=>{
+        console.log('User updated')
+      }).catch((error)=>{res.send(error)})
     });
 
-    router.delete('/:id/',ensureAuthenticated,(req,res)=>{
-
+    router.get('/:id/delete',ensureAuthenticated,(req,res)=>{
+      api.deleteUser().then((res)=>{
+        console.log('User Deleted')
+        res.redirect('/user')
+      }).catch((error)=>{res.send(error)})
     })
 
 module.exports = router
