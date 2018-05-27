@@ -24,6 +24,7 @@ const express = require('express')
     router.post('/',(req, res) =>{
       api.postUser(req.body,null,null).then((res)=>{
         console.log('User Created')
+        res.redirect(`/user/${res.data._id}`)
       }).catch((error)=>{res.send(error)})
     })
 
@@ -57,9 +58,10 @@ const express = require('express')
       }).catch((error)=>{res.send(error)})
     });
 
-    router.delete('/:id/',ensureAuthenticated,(req,res)=>{
+    router.get('/:id/delete',ensureAuthenticated,(req,res)=>{
       api.deleteUser().then((res)=>{
         console.log('User Deleted')
+        res.redirect('/user')
       }).catch((error)=>{res.send(error)})
     })
 
