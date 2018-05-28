@@ -112,23 +112,7 @@
     <% //include ../../partials/aside %>
   </div>
   <% include ../../partials/footer %>
-  <script>
-    function deleteDepartment(id){
-      let url = window.location.protocol+'//'+window.location.hostname+'/department/'+id+'/delete/',
-          delBtn = document.getElementById('delDepartmentBtn');
-      delBtn.href=url
-      $(".bd-delete-modal").modal()
-
-    }
-    function checkBing(){
-        var bingKey = document.getElementById('bingApiKey'),bingStatus= document.getElementById('bingApiStatus')
-        if(bingKey.value === '' && bingStatus.value === 'Enabled'){
-            bingKey.required=true
-        }else{
-            bingKey.required=false
-        }
-    }
-  </script>
+  <% include ../../partials/scripts %>
 </body>
 
 </html>

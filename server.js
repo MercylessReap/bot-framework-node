@@ -1,3 +1,4 @@
+global.webhost = 'http://localhost';
 const express = require('express')
     , cookieParser = require('cookie-parser')
     , expressSession = require('express-session')
@@ -10,7 +11,6 @@ const express = require('express')
         if (req.isAuthenticated()) { return next(); }
           res.redirect('/auth');
       }
-      //global.user = {id:'5afcce86fb860e4dcc59a977', name:'Swaye Chateau', perm:{admin:false, wizard:true,department:'5abea0315abfbb0b50afdc0e'}}
     , app = express()
     , port = process.env.PORT || 80
     , util = require('util')
@@ -19,9 +19,6 @@ const express = require('express')
     , routes = require('./routes/index')
     , morgan = require('morgan')
 
-    /*, azureConfig = require(rootDir+'/lib/auth/azure')
-    , passport = require('passport')
-    , OIDCStrategy = require('passport-azure-ad').OIDCStrategy;*/
     var log = bunyan.createLogger({
         name: 'Microsoft OIDC Bot Framework Application'
     });
