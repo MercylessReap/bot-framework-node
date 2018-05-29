@@ -133,7 +133,7 @@ function trainStatus(failed){
         trainBtn.classList.add('btn-secondary')
         trainStatus.classList.add('fa-check')
         trainStatus.classList.add('text-success')
-        trainP.innerHTML = "Department training was a success! Nothing to see here";
+        trainP.innerHTML = `Department training was a success! Nothing to see here <span class="btn-right"><button class="btn btn-info" onclick = 'reloadBot("<%=data._id%>")'>Train Department</button></span>`;
         spawnNotification('Department is up to date!','','Bot is good to go!!!')
     }else{
         trainBtn.title="Bot needs training!!!"
@@ -176,4 +176,31 @@ function deleteIntent(id){
         delBtn = document.getElementById('delIntentBtn');
     delBtn.onclick=ajaxDelete(url)
     $(".bd-delete-modal").modal()
+}
+function activateBots(){
+  let url = `/bot/dynamic`
+  axios.post(host+url).then((response)=>{
+    spawnNotification('All Department Bots are Active!!!!','','Activation Sucess')
+    swal('Activation Sucess','All Department Bots are Active!!!!','sucess')
+  }).catch((error)=>{
+    swal(error.response.data);
+  })
+}
+function reloadBot(id){
+  let url =`/bot/${id}/dialogs`
+  axios.post(host+url).then((response)=>{
+    spawnNotification('Bot Dialogs are now Active!!!!','','Activation Sucess')
+    swal('Activation Sucess','Bot Dialogs are now Active!!!!','sucess')
+  }).catch((error)=>{
+    swal(error.response.data);
+  })
+}
+function reloadBots(){
+  let url = `/bot/all-dialogs`
+  axios.post(host+url).then((response)=>{
+    spawnNotification('All Bots Dialogs are Active!!!!','','Activation Sucess')
+    swal('Activation Sucess','All Bots Dialogs are Active!!!!','sucess')
+  }).catch((error)=>{
+    swal(error.response.data);
+  })
 }

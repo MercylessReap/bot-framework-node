@@ -1,4 +1,5 @@
-global.webhost = 'http://localhost';
+const config = require('./lib/config')
+global.webhost = config.set.host;
 const express = require('express')
     , cookieParser = require('cookie-parser')
     , expressSession = require('express-session')
@@ -32,7 +33,7 @@ app.use(morgan('dev')); // log every request to the console
 app.use(methodOverride());
 app.use(cookieParser());
 
-app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
+app.use(expressSession({ secret: 'p&d2Hg@WMa6B!$.R', resave: true, saveUninitialized: false }));
 
 app.use(bodyParser.json());  // get information from html forms
 app.use(bodyParser.urlencoded({extended: true}));
