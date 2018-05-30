@@ -118,8 +118,9 @@ function trainModal(id){
         }
         departmentStatus(id)
       }).catch((err)=>{
-          spawnNotification(err,'','Training Error');
-          //swal('Training Error',err,'error');
+          console.log(err)
+          spawnNotification('Somthing Happend','','Training Error');
+          swal('Training Error','Somthing Happend','error');
       })
 }
 // Train Status
