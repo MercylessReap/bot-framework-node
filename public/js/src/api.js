@@ -37,7 +37,7 @@ function ajaxPost (url, array){
 function ajaxPut (url, array){
   axios.delete(host+url,array).then((response)=>{
     swal(response.data);
-    window.location.replace("http://stackoverflow.com");
+    //window.location.replace("http://stackoverflow.com");
   }).catch((error)=>{
     swal(error.response.data);
   })
@@ -169,7 +169,44 @@ function postIntent(){
     swalt('button clicked')
     postIntent.submit();
 }
+// Update Intent
 
+function updateUtt (id){
+  var utt = document.getElementById(id).value,
+      url = window.location.toString()+'/utt';
+  ajaxPost(url)
+    .then((response)=>{
+    swal().then((value)=>{
+      location.reload();
+    })
+  });
+  axios.post(host+url,{id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}).then((response)=>{
+    swal("Sucessfully Updated!", response.data, "success").then((value) => {
+        switch (value) {
+          default:
+            window.history.go(-1); return false;
+        }
+    });
+  }).catch((error)=>{
+    swal("uh-oh!",error.response.data,'error');
+  })
+}
+// Delete Utterance
+
+  function deleteUtt (id){
+    let utt = document.getElementById(id).value,
+        url = window.location.toString()+'/utt';
+    axios.delete(host+url,{id:id, department:"<%=intent.department%>"}).then((response)=>{
+    swal("Sucessfully Deleted!", response.data, "success").then((value) => {
+        switch (value) {
+          default:
+            location.reload(); return false;
+        }
+    });
+  }).catch((error)=>{
+    swal("uh-oh!",error.response.data,'error');
+  })
+  }
 // delete intent
 function deleteIntent(id){
     let url = window.location.protocol+'//'+window.location.hostname+'/intents/'+id,
@@ -177,6 +214,28 @@ function deleteIntent(id){
     delBtn.onclick=ajaxDelete(url)
     $(".bd-delete-modal").modal()
 }
+//
+function toggleDisabled(intentState){
+    let bool=intentState.value
+    bool = !bool;
+    intentState.value=bool
+    disabledStatus(bool)
+}
+function disabledStatus(bool){
+    let disabledBtn = document.getElementById('statusBtn')
+    if(bool===false){
+      disabledBtn.title="Intent is enabled"
+      disabledBtn.innerHTML="<i class='fa fa-check text-success'></i> Enabled!!"
+      disabledBtn.classList.remove('btn-secondary')
+      disabledBtn.classList.add('btn-info')
+    }else if(bool===true){
+      disabledBtn.title="intent is disabled"
+      disabledBtn.innerHTML="<i class='fa fa-times text-danger'></i> Disabled!!"
+      disabledBtn.classList.remove('btn-info')
+      disabledBtn.classList.add('btn-secondary')
+    }
+}
+//
 function activateBots(){
   let url = `/bot/dynamic`
   axios.post(host+url).then((response)=>{
