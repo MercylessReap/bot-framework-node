@@ -69,10 +69,10 @@ function getLuisIntents(id){
 function departmentStatus(id) {
   axios.all([getLuisIntents(id), trainDepartment(id)])
     .then(axios.spread((intents, status)=> {
-      let failed,
-          trainTable = document.getElementById('train-list'),
+      let trainTable = document.getElementById('train-list'),
           trainList = trainTable.innerHTML
-      if(status.data!==''){
+      if(status.data){
+        let failed = false;
           for(let i=0; i< status.data.length; i++){
             if(status.data[i].details.status === "Fail"){
               intents.data.forEach((item,index)=>{
@@ -84,7 +84,7 @@ function departmentStatus(id) {
               failed = true
             }
           }
-          if(failed !==true){
+          if(failed ===false){
             for(let i=0; i< status.data.length; i++){
               if(status.data[i].details.status === "Success"){
                 intents.data.forEach((item,index)=>{
@@ -99,9 +99,13 @@ function departmentStatus(id) {
           }
         trainStatus(failed,id)
       }else{
-        swal('Department Info','Department Bot needs to train first','info')
         spawnNotification('Department Bot needs to train first','','Department Info')
-        trainModal(id)
+        swal('Department Info','Department Bot needs to train first','info').then((value) => {
+          switch (value) {
+            default:
+            trainModal(id);
+          }
+        });
       }
     })
   );
@@ -218,13 +222,15 @@ function deleteIntent(id){
     delBtn.onclick=ajaxDelete(url)
     $(".bd-delete-modal").modal()
 }
-//
-function toggleDisabled(intentState){
-    let bool=intentState.value
+// Disable Intent Button
+function toggleDisabled(){
+    let bool,intentState= document.getElementsByName('disabled')[0]
+    bool=strToBool(intentState.value)
     bool = !bool;
     intentState.value=bool
     disabledStatus(bool)
 }
+// Show if intent is disabled or enabledd
 function disabledStatus(bool){
     let disabledBtn = document.getElementById('statusBtn')
     if(bool===false){
@@ -239,7 +245,14 @@ function disabledStatus(bool){
       disabledBtn.classList.add('btn-secondary')
     }
 }
-//
+//convert string to bool
+function strToBool(str){
+    if (str === "false"){
+      return str = false
+    }else{
+      return str = true
+    }
+}
 function activateBots(){
   let url = `/bot/dynamic`
   axios.post(host+url).then((response)=>{
