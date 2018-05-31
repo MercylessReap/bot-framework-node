@@ -69,10 +69,10 @@ function getLuisIntents(id){
 function departmentStatus(id) {
   axios.all([getLuisIntents(id), trainDepartment(id)])
     .then(axios.spread((intents, status)=> {
-      let trainTable = document.getElementById('train-list'),
+      let failed,
+          trainTable = document.getElementById('train-list'),
           trainList = trainTable.innerHTML
-      if(status.data){
-        let failed = false;
+      if(status.data!==''){
           for(let i=0; i< status.data.length; i++){
             if(status.data[i].details.status === "Fail"){
               intents.data.forEach((item,index)=>{
@@ -84,7 +84,7 @@ function departmentStatus(id) {
               failed = true
             }
           }
-          if(failed ===false){
+          if(failed !==true){
             for(let i=0; i< status.data.length; i++){
               if(status.data[i].details.status === "Success"){
                 intents.data.forEach((item,index)=>{
@@ -99,13 +99,9 @@ function departmentStatus(id) {
           }
         trainStatus(failed,id)
       }else{
+        swal('Department Info','Department Bot needs to train first','info')
         spawnNotification('Department Bot needs to train first','','Department Info')
-        swal('Department Info','Department Bot needs to train first','info').then((value) => {
-          switch (value) {
-            default:
-            trainModal(id);
-          }
-        });
+        trainModal(id)
       }
     })
   );
@@ -137,6 +133,7 @@ function trainModal(id){
       })
 }
 // Train Status
+
 function trainStatus(failed,id){
     let trainStatus = document.getElementById('train-status'),
         trainBtn = document.getElementById('trainBtn'),
@@ -147,7 +144,7 @@ function trainStatus(failed,id){
         trainBtn.classList.add('btn-secondary')
         trainStatus.classList.add('fa-check')
         trainStatus.classList.add('text-success')
-        trainP.innerHTML = `Department training was a success! Nothing to see here <span class="btn-right"><button class="btn btn-info" onclick = 'reloadBot("${id}")'>Train Department</button></span>`;
+        trainP.innerHTML = `Department training was a success! Nothing to see here <span class="btn-right"><button class="btn btn-info" onclick = 'reloadBot("${id}")'>Reload Department Dialogs</button></span>`;
         spawnNotification('Department is up to date!','','Bot is good to go!!!')
     }else{
         trainBtn.title="Bot needs training!!!"
@@ -155,9 +152,9 @@ function trainStatus(failed,id){
         trainBtn.classList.add('btn-warning')
         trainStatus.classList.add('fa-exclamation')
         trainStatus.classList.add('text-danger')
-        trainP.innerHTML = `Department training Failed! <span class='btn-right'><button class='btn btn-info' onclick = 'trainModal("${id}")'>Train Department</button></span> <p> FewLabels = Not enough Utterances for practical use!</p>`
-        spawnNotification('Department training Failed!','','Bot needs training!!!')
-        swal('Department training Failed!','Bot needs training!!!','warning')
+        trainP.innerHTML = `Department training Failed! <span class='btn-right'><button class='btn btn-success' onclick = 'trainModal("${id}")'>Train Department</button></span> <p> FewLabels = Not enough Utterances for practical use!</p>`
+        spawnNotification('Department training Failed!','','Bot failed training!!!')
+        swal('Department training Failed!','Bot failed training!!!','warning')
     }
     document.getElementById('train-table').classList.add('table')
 }
